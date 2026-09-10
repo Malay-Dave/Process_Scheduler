@@ -1,24 +1,14 @@
+#include"Process.h"
+#include"Scheduler.h"
+
 #include<iostream>
 #include<fstream>
 #include<string>
 #include<sstream>
 #include<vector>
-#include<queue>
-#include<list>
-#include<algorithm>
+
 
 using namespace std;
-struct Process{
-    int id;
-    int arrival_time;
-    int dept_time;
-    int cpu_idx;
-    int io_idx;
-    int io_finish=-1;
-    vector<int> cpu_burst;
-    vector<int> io_burst;
-
-};
 
 
 
@@ -63,48 +53,6 @@ vector<Process> parse_file(char* s){
 
 
 
-void fifo(vector<Process>& process, vector<string>& ans){
-    queue<int> que;
-    int current_time=0;
-    
-    int n=process.size();
-    
-    int completed=0;
-    priority_queue<pair<int,int> , vector<pair<int,int>>, greater<pair<int,int>>> pq; 
-    for(int i=0;i<n;i++){
-        pq.push({process[i].arrival_time, i});
-    }
-    while(completed < n){
-        
-        while(!pq.empty() && pq.top().first <=current_time){
-            que.push(pq.top().second);
-            pq.pop();
-        }
-        if(que.empty()){
-            if(!pq.empty()){
-                current_time=pq.top().first;
-            }
-            else current_time++;
-            continue;
-        }
-        int top=que.front();
-        que.pop();
-        ans.push_back( "P" + to_string(process[top].id) + "," + to_string(process[top].cpu_idx+1) + " "  + to_string(current_time) + "\t" + to_string( current_time + process[top].cpu_burst[process[top].cpu_idx]-1) );
-        current_time+=process[top].cpu_burst[process[top].cpu_idx];
-        process[top].cpu_idx++;
-        if(process[top].cpu_idx==process[top].cpu_burst.size()){
-            process[top].dept_time=current_time-1;
-            completed++;
-        }
-        else{
-            process[top].io_finish=current_time+process[top].io_burst[process[top].io_idx];
-            process[top].io_idx++;
-            pq.push({process[top].io_finish, top});
-        }
-    }
-
-}
-
 
 int main(int argc , char* argv[]){
     if(argc!=3){
@@ -118,7 +66,11 @@ int main(int argc , char* argv[]){
     vector<string> ans;
     if(string(argv[1])=="FIFO"){
         fifo(process, ans);
-        
+        for(string i: ans)cout << i << endl;
+    }
+    if(string(argv[1])=="RR"){
+        roundrobin(process, ans);
+        for(string i: ans)cout << i << endl;
     }
     return 0;
 }
