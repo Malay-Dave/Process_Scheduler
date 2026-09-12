@@ -7,3 +7,4 @@
 
 void fifo(std::vector<Process>& process, std::vector<std::string>& ans);
 void roundrobin(std::vector<Process>& process, std::vector<std::string>& ans);
+void MLFQ(std::vector<Process>& process, std::vector<std::string>& ans);

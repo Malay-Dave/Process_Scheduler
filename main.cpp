@@ -8,6 +8,7 @@
 #include<vector>
 
 
+
 using namespace std;
 
 
@@ -70,6 +71,10 @@ int main(int argc , char* argv[]){
     }
     if(string(argv[1])=="RR"){
         roundrobin(process, ans);
+        for(string i: ans)cout << i << endl;
+    }
+    if(string(argv[1])=="MLFQ"){
+        MLFQ(process, ans);
         for(string i: ans)cout << i << endl;
     }
     return 0;

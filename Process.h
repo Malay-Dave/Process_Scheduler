@@ -9,6 +9,7 @@ struct Process{
     int cpu_idx;
     int io_idx;
     int io_finish=-1;
+    int priority=0;
     std::vector<int> cpu_burst;
     std::vector<int> io_burst;
 };
